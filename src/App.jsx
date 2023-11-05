@@ -1,29 +1,28 @@
-import { useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
-import { useState } from 'react';
 
 function App() {
-  const [seconds, setSeconds] = useState(0);
-  const [minute, setMinutes] = useState(25);
+  const [seconds, setSeconds] = useState(60);
+  const [minute, setMinutes] = useState(24);
+  const [pause, setPause] = useState(false);
 
-  let [timerActive, setTimerActive] = useState(false);
+  let intervalRef = useRef();
 
+  const decreaseSeconds = () => setSeconds((prev) => prev - 1);
   useEffect(() => {
-    let interval;
-    if (timerActive == true) {
-      interval = setInterval(() => {
-        setSeconds((prevCounter) => {
-          if (prevCounter === 0) {
-            setMinutes((prevCounter2) => prevCounter2 - 1);
-            return 0;
-          } 
-          return prevCounter - 1;
-        });
-        return 0;
-      });
+    intervalRef.current = setInterval(decreaseSeconds, 1000);
+
+    return () => clearInterval(intervalRef.current);
+  }, []);
+
+  const handleClick = () => {
+    if (!pause) {
+      clearInterval(intervalRef.current);
+    } else {
+      intervalRef.current = setInterval(decreaseSeconds, 1000);
     }
-    return () => clearInterval(interval);
-  }, [timerActive]);
+    setPause((prev) => !prev);
+  };
 
   return (
     <div className="pomodoro_app">
@@ -31,8 +30,9 @@ function App() {
         <h1> pomodoro </h1>
         <hr />
       </div>
+<div className="pomo_container">
 
-      <div className="pomo_Count">
+   <div className="pomo_Count">
         <div className="pomodoro_type">
           <ul>
             <li> pomodoro </li>
@@ -41,21 +41,17 @@ function App() {
           </ul>
         </div>
 
-        <div className="timer_countdown">
+        <span className="timer_countdown">
           {' '}
           {minute} : {seconds}{' '}
-        </div>
+        </span>
 
-        <div>
-          <button
-            onClick={() => {
-              setTimerActive(true);
-            }}
-          >
-            Start
-          </button>
+        <div className='btn'>
+          <button onClick={handleClick}>{pause ? 'start' : 'pause'}</button>
         </div>
       </div>
+</div>
+     
     </div>
   );
 }
