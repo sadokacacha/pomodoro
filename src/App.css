@@ -5,13 +5,30 @@
   background: #bd5353;
   font-weight: 300;
   -webkit-tap-highlight-color: transparent;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .top_bar {
+  justify-content: flex-start;
   padding-bottom: 5px;
+  width: 600px;
+
 }
+
+.title_line {
+  border-color: #69646448;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 50px;
+
+}
+
 h1 {
   padding-bottom: 15px;
+  color: white;
+  display: flex;
+  justify-content: flex-start;
 }
 hr {
   background: #c44040;
@@ -21,6 +38,7 @@ hr {
 
 .pomo_container {
   width: 580px;
+  padding-top: 30px;
 }
 
 .pomodoro_app {
@@ -57,6 +75,10 @@ ul {
 li {
   padding-left: 40px;
   margin-bottom: 5px;
+  color: white;
+font-size: 20px;
+
+
 }
 
 .timer_countdown {

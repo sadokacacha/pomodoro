@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
-
 function App() {
   const [seconds, setSeconds] = useState(0);
   const [minute, setMinutes] = useState(25);
-  const [start, setstart] = useState(true);
+  let [start, setStart] = useState(false);
 
   let intervalRef = useRef();
 
@@ -13,33 +12,29 @@ function App() {
     setMinutes((prev) => prev - 1);
     setSeconds(59);
   };
-  const startCounter = () => setstart((start) => !start);
   /* the pause func */
 
   const handleClick = () => {
-    if (!start) {
-      intervalRef.current = setInterval(decreaseSeconds, 1000);
-    } else {
-      clearInterval(intervalRef.current);
-    }
-    startCounter();
+    setStart((start) => !start);
   };
 
   /* the main counter  func */
 
   useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      if (seconds > 0) {
-        decreaseSeconds();
-      } else {
-        if (minute > 0) {
-          decreaseMinute();
+    if (start) {
+      intervalRef.current = setInterval(() => {
+        if (seconds > 0) {
+          decreaseSeconds();
+        } else {
+          if (minute > 0) {
+            decreaseMinute();
+          }
         }
-      }
-    }, 1000);
+      }, 1000);
+    }
 
     return () => clearInterval(intervalRef.current);
-  }, [seconds, minute]);
+  }, [seconds, minute, start]);
 
   /* the alert one idk why i added this */
 
@@ -57,9 +52,11 @@ function App() {
         <div className="pomo_Count">
           <div className="pomodoro_type">
             <ul>
-              <li> pomodoro </li>
-              <li>break</li>
-              <li>long break</li>
+              <li className="pomodoro_tab">
+                <a href="App.jsx"> pomodoro </a>
+              </li>
+              <li className=" short break"> short break</li>
+              <li className=" long break">long break</li>
             </ul>
           </div>
 
@@ -72,9 +69,19 @@ function App() {
 
           <div className="btn">
             <button onClick={handleClick}>{start ? 'start' : 'pause'}</button>
+
+            <button
+              onClick={() => {
+                setStart(false);
+                setSeconds(0);
+                setMinutes(25);
+              }}
+            >
+              reset
+            </button>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
   );
 }
